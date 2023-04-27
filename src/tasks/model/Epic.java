@@ -19,4 +19,13 @@ public class Epic extends Task {
         return List.copyOf(subtasksId);
     }
 
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "subtasksId=" + subtasksId +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }
