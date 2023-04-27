@@ -3,8 +3,10 @@ package tasks.service;
 import tasks.model.Epic;
 import tasks.model.Subtask;
 import tasks.model.Task;
+import tasks.model.TaskStatus;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TaskManager {
 
@@ -105,7 +107,6 @@ public class TaskManager {
 
     public void removeAllEpics() {
         for (Epic epic : epicsById.values()) {
-
             List<Integer> subtasksId = epic.getSubtasksId();
 
             subtasksId.forEach(this::removeSubtaskById);
@@ -133,6 +134,31 @@ public class TaskManager {
 
     public void removeSubtaskById(int id) {
         subtasksById.remove(id);
+    }
+
+    private void updateEpicStatusById(int id) {
+        Epic epic = getEpicById(id);
+        if (epic == null)
+            return;
+
+        List<Subtask> subtasks = epic.getSubtasksId()
+                                     .stream()
+                                     .map(this::getSubtaskById)
+                                     .collect(Collectors.toList());
+
+        Epic updatedEpic = new Epic(
+            epic.getName(), epic.getDescription(), getStatusOfEpicBySubtasks(subtasks)
+        );
+
+        updateEpic(epic.getId(), updatedEpic);
+    }
+
+    private TaskStatus getStatusOfEpicBySubtasks(List<Subtask> subtasks) {
+        if (subtasks.isEmpty() || subtasks.stream().allMatch(s -> s.getStatus() == TaskStatus.NEW))
+            return TaskStatus.NEW;
+        else if (subtasks.stream().allMatch(s -> s.getStatus() == TaskStatus.DONE))
+            return TaskStatus.DONE;
+        return TaskStatus.IN_PROGRESS;
     }
 
 }
