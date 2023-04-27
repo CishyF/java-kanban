@@ -11,6 +11,10 @@ public class Epic extends Task {
         super(name, description, status);
     }
 
+    public void addSubtaskId(int id) {
+        subtasksId.add(id);
+    }
+
     public List<Integer> getSubtasksId() {
         return List.copyOf(subtasksId);
     }
