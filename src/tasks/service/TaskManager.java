@@ -47,5 +47,15 @@ public class TaskManager {
         return subtaskId;
     }
 
+    public Task getTaskById(int id) {
+        return tasksById.get(id);
+    }
 
+    public Epic getEpicById(int id) {
+        return epicsById.get(id);
+    }
+
+    public Subtask getSubtaskById(int id) {
+        return subtasksById.get(id);
+    }
 }
