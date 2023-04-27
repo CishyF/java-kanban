@@ -67,9 +67,6 @@ public class TaskManager {
         if (!epicsById.containsKey(id))
             return;
 
-        List<Integer> subtasksOfCurrentEpicAtId = epicsById.get(id).getSubtasksId();
-        subtasksOfCurrentEpicAtId.forEach(this::removeSubtaskById);
-
         epic.setId(id);
         epicsById.put(id, epic);
     }
