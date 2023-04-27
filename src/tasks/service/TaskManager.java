@@ -8,7 +8,7 @@ import java.util.*;
 
 public class TaskManager {
 
-    private static int IdCounter = 0;
+    private static int IdCounter = 1;
     private final Map<Integer, Task> tasksById;
     private final Map<Integer, Epic> epicsById;
     private final Map<Integer, Subtask> subtasksById;
@@ -44,6 +44,33 @@ public class TaskManager {
         subtasksById.put(subtaskId, subtask);
 
         return subtaskId;
+    }
+
+    public void updateTask(int id, Task task) {
+        if (!tasksById.containsKey(id))
+            return;
+
+        task.setId(id);
+        tasksById.put(id, task);
+    }
+
+    public void updateEpic(int id, Epic epic) {
+        if (!epicsById.containsKey(id))
+            return;
+
+        List<Integer> subtasksOfCurrentEpicAtId = epicsById.get(id).getSubtasksId();
+        subtasksOfCurrentEpicAtId.forEach(this::removeSubtaskById);
+
+        epic.setId(id);
+        epicsById.put(id, epic);
+    }
+
+    public void updateSubtask(int id, Subtask subtask) {
+        if (!subtasksById.containsKey(id))
+            return;
+
+        subtask.setId(id);
+        subtasksById.put(id, subtask);
     }
 
     public List<Task> getAllTasks() {
@@ -107,4 +134,5 @@ public class TaskManager {
     public void removeSubtaskById(int id) {
         subtasksById.remove(id);
     }
+
 }
