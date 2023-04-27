@@ -29,18 +29,16 @@ public class TaskManagerApplication {
         int idSubtask1Epic1 = taskManager.createSubtask(
                 new Subtask("Название позадачи 1 эпика 1", "", TaskStatus.IN_PROGRESS, idEpic1)
         );
-        taskManager.getEpicById(idEpic1).addSubtaskId(idSubtask1Epic1);
 
-        Epic epic2 = new Epic("Название 2 эпика", "", TaskStatus.IN_PROGRESS);
-        int idEpic2 = taskManager.createEpic(epic2);
+        int idEpic2 = taskManager.createEpic(
+                new Epic("Название 2 эпика", "", TaskStatus.IN_PROGRESS)
+        );
         int idSubtask1Epic2 = taskManager.createSubtask(
                 new Subtask("Название подзадачи 1 эпика 2", "", TaskStatus.NEW, idEpic2)
         );
-        epic2.addSubtaskId(idSubtask1Epic2);
         int idSubtask2Epic2 = taskManager.createSubtask(
                 new Subtask("Название подзадачи 2 эпика 2", "", TaskStatus.NEW, idEpic2)
         );
-        epic2.addSubtaskId(idSubtask2Epic2);
 
         System.out.printf("Задачи:%n%s%nЭпики:%n%s%nПодзадачи:%n%s%n%s%n",
                 taskManager.getAllTasks(),

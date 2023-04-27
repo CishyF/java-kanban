@@ -159,18 +159,15 @@ public class TaskManager {
         if (epic == null)
             return;
 
-        List<Subtask> subtasks = epic.getSubtasksId()
-                                     .stream()
-                                     .map(this::getSubtaskById)
-                                     .collect(Collectors.toList());
-        TaskStatus updatedStatus = getStatusOfEpicBySubtasks(subtasks);
-        if (updatedStatus == epic.getStatus())
-            return;
+        List<Subtask> subtasksOfCurrentEpic = getAllSubtasks().stream()
+                                                              .filter(subtask -> subtask.getEpicId() == id)
+                                                              .collect(Collectors.toList());
+        TaskStatus updatedStatus = getStatusOfEpicBySubtasks(subtasksOfCurrentEpic);
 
         Epic updatedEpic = new Epic(
             epic.getName(), epic.getDescription(), updatedStatus
         );
-        subtasks.forEach(subtask -> updatedEpic.addSubtaskId(subtask.getId()));
+        subtasksOfCurrentEpic.forEach(subtask -> updatedEpic.addSubtaskId(subtask.getId()));
 
         updateEpic(epic.getId(), updatedEpic);
     }
