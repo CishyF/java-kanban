@@ -4,10 +4,7 @@ import tasks.model.Epic;
 import tasks.model.Subtask;
 import tasks.model.Task;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class TaskManager {
 
@@ -47,6 +44,18 @@ public class TaskManager {
         subtasksById.put(subtaskId, subtask);
 
         return subtaskId;
+    }
+
+    public List<Task> getAllTasks() {
+        return new ArrayList<>(tasksById.values());
+    }
+
+    public List<Epic> getAllEpics() {
+        return new ArrayList<>(epicsById.values());
+    }
+
+    public List<Subtask> getAllSubtasks() {
+        return new ArrayList<>(subtasksById.values());
     }
 
     public Task getTaskById(int id) {
