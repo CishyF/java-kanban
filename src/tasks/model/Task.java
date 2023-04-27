@@ -39,4 +39,20 @@ public class Task {
         this.status = status;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Task))
+            return false;
+
+        Task t = (Task) o;
+        return id == t.id;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return 31 * Integer.hashCode(id);
+    }
 }
