@@ -5,7 +5,9 @@ import tasks.model.Subtask;
 import tasks.model.Task;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class TaskManager {
 
@@ -57,5 +59,43 @@ public class TaskManager {
 
     public Subtask getSubtaskById(int id) {
         return subtasksById.get(id);
+    }
+
+
+
+    public void removeAllTasks() {
+        tasksById.clear();
+    }
+
+    public void removeAllEpics() {
+        for (Epic epic : epicsById.values()) {
+
+            List<Integer> subtasksId = epic.getSubtasksId();
+
+            subtasksId.forEach(this::removeSubtaskById);
+        }
+
+        epicsById.clear();
+    }
+
+    public void removeAllSubtasks() {
+        subtasksById.clear();
+    }
+
+    public void removeTaskById(int id) {
+        tasksById.remove(id);
+    }
+
+    public void removeEpicById(int id) {
+        Epic epic = Objects.requireNonNull(getEpicById(id));
+
+        List<Integer> subtasksId = epic.getSubtasksId();
+        subtasksId.forEach(this::removeSubtaskById);
+
+        epicsById.remove(id);
+    }
+
+    public void removeSubtaskById(int id) {
+        subtasksById.remove(id);
     }
 }
