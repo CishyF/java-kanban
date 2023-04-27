@@ -38,6 +38,8 @@ public class TaskManager {
         epic.setId(epicId);
         epicsById.put(epicId, epic);
 
+        updateEpicStatusById(epicId);
+
         return epicId;
     }
 
