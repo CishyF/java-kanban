@@ -45,6 +45,8 @@ public class TaskManager {
         subtask.setId(subtaskId);
         subtasksById.put(subtaskId, subtask);
 
+        updateEpicStatusById(subtask.getEpicId());
+
         return subtaskId;
     }
 
@@ -73,6 +75,8 @@ public class TaskManager {
 
         subtask.setId(id);
         subtasksById.put(id, subtask);
+
+        updateEpicStatusById(subtask.getEpicId());
     }
 
     public List<Task> getAllTasks() {
@@ -116,6 +120,8 @@ public class TaskManager {
     }
 
     public void removeAllSubtasks() {
+        epicsById.values().stream().mapToInt(Epic::getId).forEach(this::updateEpicStatusById);
+
         subtasksById.clear();
     }
 
@@ -133,7 +139,14 @@ public class TaskManager {
     }
 
     public void removeSubtaskById(int id) {
+        if (subtasksById.get(id) == null)
+            return;
+
+        int epicId = subtasksById.get(id).getEpicId();
+
         subtasksById.remove(id);
+
+        updateEpicStatusById(epicId);
     }
 
     private void updateEpicStatusById(int id) {
