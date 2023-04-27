@@ -22,6 +22,7 @@ public class TaskManager {
     }
 
     public int createTask(Task task) {
+        Objects.requireNonNull(task);
         int taskId = IdCounter++;
 
         task.setId(taskId);
@@ -31,6 +32,7 @@ public class TaskManager {
     }
 
     public int createEpic(Epic epic) {
+        Objects.requireNonNull(epic);
         int epicId = IdCounter++;
 
         epic.setId(epicId);
@@ -40,6 +42,7 @@ public class TaskManager {
     }
 
     public int createSubtask(Subtask subtask) {
+        Objects.requireNonNull(subtask);
         int subtaskId = IdCounter++;
 
         subtask.setId(subtaskId);
