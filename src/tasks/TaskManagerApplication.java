@@ -40,6 +40,28 @@ public class TaskManagerApplication {
                 new Subtask("Название подзадачи 2 эпика 2", "", TaskStatus.NEW, idEpic2)
         );
 
+        printAllTypesOfTasks();
+
+        taskManager.updateTask(idTask1, new Task("Обновленная задача 1", "", TaskStatus.IN_PROGRESS));
+        taskManager.updateSubtask(
+                idSubtask1Epic1,
+                new Subtask("Обновленная подзадача 1 эпика 1", "", TaskStatus.DONE, idEpic1)
+        );
+        taskManager.updateSubtask(
+                idSubtask2Epic2,
+                new Subtask("Обновленная задача 2 эпика 2", "", TaskStatus.IN_PROGRESS, idEpic2)
+        );
+
+        printAllTypesOfTasks();
+
+        taskManager.removeTaskById(idTask1);
+        taskManager.removeEpicById(idEpic2);
+
+        printAllTypesOfTasks();
+
+    }
+
+    public void printAllTypesOfTasks() {
         System.out.printf("Задачи:%n%s%nЭпики:%n%s%nПодзадачи:%n%s%n%s%n",
                 taskManager.getAllTasks(),
                 taskManager.getAllEpics(),
