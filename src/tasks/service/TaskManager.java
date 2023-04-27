@@ -28,4 +28,24 @@ public class TaskManager {
 
         return taskId;
     }
+
+    public int createEpic(Epic epic) {
+        int epicId = IdCounter++;
+
+        epic.setId(epicId);
+        epicsById.put(epicId, epic);
+
+        return epicId;
+    }
+
+    public int createSubtask(Subtask subtask) {
+        int subtaskId = IdCounter++;
+
+        subtask.setId(subtaskId);
+        subtasksById.put(subtaskId, subtask);
+
+        return subtaskId;
+    }
+
+
 }
