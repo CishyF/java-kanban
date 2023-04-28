@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class TaskManager {
 
-    private static int IdCounter = 1;
+    private int IdCounter = 1;
     private final Map<Integer, Task> tasksById;
     private final Map<Integer, Epic> epicsById;
     private final Map<Integer, Subtask> subtasksById;
