@@ -45,14 +45,16 @@ public class TaskManagerApplication {
         Task updatedTask = new Task("Обновленная задача 1", "", TaskStatus.IN_PROGRESS);
         updatedTask.setId(idTask1);
         taskManager.updateTask(updatedTask);
-        taskManager.updateSubtask(
-                idSubtask1Epic1,
-                new Subtask("Обновленная подзадача 1 эпика 1", "", TaskStatus.DONE, idEpic1)
-        );
-        taskManager.updateSubtask(
-                idSubtask2Epic2,
-                new Subtask("Обновленная задача 2 эпика 2", "", TaskStatus.IN_PROGRESS, idEpic2)
-        );
+
+        Subtask updatedSubtask1Epic1 =
+                new Subtask("Обновленная подзадача 1 эпика 1", "", TaskStatus.DONE, idEpic1);
+        updatedSubtask1Epic1.setId(idSubtask1Epic1);
+        taskManager.updateSubtask(updatedSubtask1Epic1);
+
+        Subtask updatedSubtask2Epic2 =
+                new Subtask("Обновленная задача 2 эпика 2", "", TaskStatus.IN_PROGRESS, idEpic2);
+        updatedSubtask2Epic2.setId(idSubtask2Epic2);
+        taskManager.updateSubtask(updatedSubtask2Epic2);
 
         printAllTypesOfTasks();
 
