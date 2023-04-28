@@ -100,6 +100,10 @@ public class TaskManager {
         return new ArrayList<>(subtasks.values());
     }
 
+    public List<Subtask> getSubtasksByEpicId(int epicId) {
+        return subtasks.values().stream().filter(subtask -> subtask.getEpicId() == epicId).collect(Collectors.toList());
+    }
+
     public Task getTask(int id) {
         return tasks.get(id);
     }
