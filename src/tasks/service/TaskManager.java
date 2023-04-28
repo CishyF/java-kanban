@@ -66,12 +66,14 @@ public class TaskManager {
         tasks.put(task.getId(), task);
     }
 
-    public void updateEpic(int id, Epic epic) {
-        if (!epics.containsKey(id))
+    public void updateEpic(Epic epic) {
+        Objects.requireNonNull(epic);
+        if (!epics.containsKey(epic.getId()))
             return;
 
-        epic.setId(id);
-        epics.put(id, epic);
+        Epic savedEpic = epics.get(epic.getId());
+        savedEpic.setName(epic.getName());
+        savedEpic.setDescription(epic.getDescription());
     }
 
     public void updateSubtask(int id, Subtask subtask) {
@@ -167,9 +169,10 @@ public class TaskManager {
         Epic updatedEpic = new Epic(
             epic.getName(), epic.getDescription(), updatedStatus
         );
+        updatedEpic.setId(epic.getId());
         subtasksOfCurrentEpic.forEach(subtask -> updatedEpic.addSubtaskId(subtask.getId()));
 
-        updateEpic(epic.getId(), updatedEpic);
+        updateEpic(updatedEpic);
     }
 
     private TaskStatus getStatusOfEpic(List<Subtask> subtasks) {
