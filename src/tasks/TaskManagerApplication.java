@@ -54,8 +54,8 @@ public class TaskManagerApplication {
 
         printAllTypesOfTasks();
 
-        taskManager.removeTaskById(idTask1);
-        taskManager.removeEpicById(idEpic2);
+        taskManager.removeTask(idTask1);
+        taskManager.removeEpic(idEpic2);
 
         printAllTypesOfTasks();
 
@@ -63,9 +63,9 @@ public class TaskManagerApplication {
 
     public void printAllTypesOfTasks() {
         System.out.printf("Задачи:%n%s%nЭпики:%n%s%nПодзадачи:%n%s%n%s%n",
-                taskManager.getAllTasks(),
-                taskManager.getAllEpics(),
-                taskManager.getAllSubtasks(),
+                taskManager.getTasks(),
+                taskManager.getEpics(),
+                taskManager.getSubtasks(),
                 "-".repeat(200)
         );
     }
