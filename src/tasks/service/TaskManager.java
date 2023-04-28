@@ -76,12 +76,14 @@ public class TaskManager {
         savedEpic.setDescription(epic.getDescription());
     }
 
-    public void updateSubtask(int id, Subtask subtask) {
-        if (!subtasks.containsKey(id))
+    public void updateSubtask(Subtask subtask) {
+        Objects.requireNonNull(subtask);
+        if (!subtasks.containsKey(subtask.getId()))
+            return;
+        if (!epics.containsKey(subtask.getEpicId()))
             return;
 
-        subtask.setId(id);
-        subtasks.put(id, subtask);
+        subtasks.put(subtask.getId(), subtask);
 
         updateEpicStatus(subtask.getEpicId());
     }
