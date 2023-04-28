@@ -42,7 +42,9 @@ public class TaskManagerApplication {
 
         printAllTypesOfTasks();
 
-        taskManager.updateTask(idTask1, new Task("Обновленная задача 1", "", TaskStatus.IN_PROGRESS));
+        Task updatedTask = new Task("Обновленная задача 1", "", TaskStatus.IN_PROGRESS);
+        updatedTask.setId(idTask1);
+        taskManager.updateTask(updatedTask);
         taskManager.updateSubtask(
                 idSubtask1Epic1,
                 new Subtask("Обновленная подзадача 1 эпика 1", "", TaskStatus.DONE, idEpic1)

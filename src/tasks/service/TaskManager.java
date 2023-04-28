@@ -58,12 +58,12 @@ public class TaskManager {
         return subtaskId;
     }
 
-    public void updateTask(int id, Task task) {
-        if (!tasks.containsKey(id))
+    public void updateTask(Task task) {
+        Objects.requireNonNull(task);
+        if (!tasks.containsKey(task.getId()))
             return;
 
-        task.setId(id);
-        tasks.put(id, task);
+        tasks.put(task.getId(), task);
     }
 
     public void updateEpic(int id, Epic epic) {
