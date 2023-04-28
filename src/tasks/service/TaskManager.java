@@ -45,6 +45,9 @@ public class TaskManager {
 
     public int createSubtask(Subtask subtask) {
         Objects.requireNonNull(subtask);
+        if (!epics.containsKey(subtask.getEpicId()))
+            throw new RuntimeException("Эпик, для которого вы пытаетесь добавить подзадачу, еще не существует.");
+
         int subtaskId = IdCounter++;
 
         subtask.setId(subtaskId);
