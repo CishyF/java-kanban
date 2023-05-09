@@ -4,12 +4,12 @@ import tasks.model.Epic;
 import tasks.model.Subtask;
 import tasks.model.Task;
 import tasks.model.TaskStatus;
-import tasks.service.InMemoryTaskManager;
 import tasks.service.TaskManager;
+import tasks.util.Managers;
 
 public class TaskManagerApplication {
 
-    private final TaskManager taskManager = new InMemoryTaskManager();
+    private final TaskManager taskManager = Managers.getDefault();
 
     public static void main(String[] args) {
         new TaskManagerApplication().start();
