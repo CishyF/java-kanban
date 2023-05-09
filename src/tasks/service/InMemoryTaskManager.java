@@ -115,6 +115,15 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public void getHistory() {
+        System.out.println("История просмотров:");
+        System.out.println("-".repeat(200));
+        history.stream().map(task -> String.format("\t- %s", task))
+                        .forEach(System.out::println);
+        System.out.println("-".repeat(200));
+    }
+
+    @Override
     public Task getTask(int id) {
         Task task = tasks.get(id);
 
@@ -143,8 +152,6 @@ public class InMemoryTaskManager implements TaskManager {
 
         return subtask;
     }
-
-
 
     @Override
     public void removeTasks() {
