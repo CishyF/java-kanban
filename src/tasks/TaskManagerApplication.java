@@ -66,6 +66,11 @@ public class TaskManagerApplication {
 
         taskManager.getHistory();
 
+        taskManager.getEpic(idEpic1);
+        taskManager.getTask(idTask2);
+
+        taskManager.getHistory();
+
     }
 
     public void printAllTypesOfTasks() {
