@@ -67,6 +67,7 @@ public class TaskManagerApplication {
         taskManager.getHistory().forEach(System.out::println);
 
         taskManager.getEpic(idEpic1);
+        taskManager.getEpic(idEpic1);
         taskManager.getTask(idTask2);
 
         taskManager.getHistory().forEach(System.out::println);
