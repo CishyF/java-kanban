@@ -116,6 +116,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void getHistory() {
+        if (history.size() == 0) {
+            System.out.println("*История просмотров пуста*");
+            System.out.println("-".repeat(200));
+            return;
+        }
         System.out.println("История просмотров:");
         System.out.println("-".repeat(200));
         history.stream().map(task -> String.format("\t- %s", task))
@@ -183,7 +188,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpic(int id) {
-        Epic epic = Objects.requireNonNull(getEpic(id));
+        Epic epic = Objects.requireNonNull(epics.get(id));
 
         List<Integer> subtasksId = epic.getSubtasksId();
         subtasksId.forEach(this::removeSubtask);
@@ -210,7 +215,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void updateEpicStatus(int id) {
-        Epic epic = getEpic(id);
+        Epic epic = epics.get(id);
         if (epic == null)
             return;
 
