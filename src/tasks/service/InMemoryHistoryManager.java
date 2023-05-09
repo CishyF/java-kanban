@@ -2,22 +2,22 @@ package tasks.service;
 
 import tasks.model.Task;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final List<Task> history;
+    private Set<Task> history;
 
     public InMemoryHistoryManager() {
-        history = new ArrayList<>();
+        history = new LinkedHashSet<>();
     }
 
     @Override
     public void add(Task task) {
         history.add(task);
         if (history.size() > 10)
-            history.remove(0);
+            history = new LinkedHashSet<>(new ArrayList<>(history).subList(1, 10));
     }
 
     @Override
