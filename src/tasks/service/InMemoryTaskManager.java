@@ -14,13 +14,13 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> tasks;
     private final Map<Integer, Epic> epics;
     private final Map<Integer, Subtask> subtasks;
-    private final Queue<Task> history;
+    private final HistoryManager history;
 
     public InMemoryTaskManager() {
         tasks = new HashMap<>();
         epics = new HashMap<>();
         subtasks = new HashMap<>();
-        history = new LinkedList<>();
+        history = new InMemoryHistoryManager();
     }
 
     @Override
@@ -115,17 +115,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void getHistory() {
-        if (history.size() == 0) {
-            System.out.println("*История просмотров пуста*");
-            System.out.println("-".repeat(200));
-            return;
-        }
-        System.out.println("История просмотров:");
-        System.out.println("-".repeat(200));
-        history.stream().map(task -> String.format("\t- %s", task))
-                        .forEach(System.out::println);
-        System.out.println("-".repeat(200));
+    public List<Task> getHistory() {
+        return history.getHistory();
     }
 
     @Override
@@ -133,7 +124,7 @@ public class InMemoryTaskManager implements TaskManager {
         Task task = tasks.get(id);
 
         if (task != null)
-            addToHistory(task);
+            history.add(task);
 
         return task;
     }
@@ -143,7 +134,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(id);
 
         if (epic != null)
-            addToHistory(epic);
+            history.add(epic);
 
         return epic;
     }
@@ -153,7 +144,7 @@ public class InMemoryTaskManager implements TaskManager {
         Subtask subtask = subtasks.get(id);
 
         if (subtask != null)
-            addToHistory(subtask);
+            history.add(subtask);
 
         return subtask;
     }
@@ -206,12 +197,6 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.remove(id);
 
         updateEpicStatus(epicId);
-    }
-
-    private void addToHistory(Task task) {
-        history.add(task);
-        if (history.size() > 10)
-            history.poll();
     }
 
     private void updateEpicStatus(int id) {

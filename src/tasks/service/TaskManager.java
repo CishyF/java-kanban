@@ -20,7 +20,7 @@ public interface TaskManager {
 
     void updateSubtask(Subtask subtask);
 
-    void getHistory();
+    List<Task> getHistory();
 
     List<Task> getTasks();
 

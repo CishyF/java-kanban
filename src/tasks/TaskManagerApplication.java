@@ -64,12 +64,12 @@ public class TaskManagerApplication {
 
         printAllTypesOfTasks();
 
-        taskManager.getHistory();
+        taskManager.getHistory().forEach(System.out::println);
 
         taskManager.getEpic(idEpic1);
         taskManager.getTask(idTask2);
 
-        taskManager.getHistory();
+        taskManager.getHistory().forEach(System.out::println);
 
     }
 
