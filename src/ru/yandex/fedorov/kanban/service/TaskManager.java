@@ -1,11 +1,10 @@
-package tasks.service;
+package ru.yandex.fedorov.kanban.service;
 
-import tasks.model.Epic;
-import tasks.model.Subtask;
-import tasks.model.Task;
+import ru.yandex.fedorov.kanban.model.Epic;
+import ru.yandex.fedorov.kanban.model.Subtask;
+import ru.yandex.fedorov.kanban.model.Task;
 
 import java.util.List;
-import java.util.Set;
 
 public interface TaskManager {
 

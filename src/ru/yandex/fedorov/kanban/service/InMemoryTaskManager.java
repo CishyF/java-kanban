@@ -1,9 +1,10 @@
-package tasks.service;
+package ru.yandex.fedorov.kanban.service;
 
-import tasks.model.Epic;
-import tasks.model.Subtask;
-import tasks.model.Task;
-import tasks.model.TaskStatus;
+import ru.yandex.fedorov.kanban.model.Epic;
+import ru.yandex.fedorov.kanban.model.Subtask;
+import ru.yandex.fedorov.kanban.model.Task;
+import ru.yandex.fedorov.kanban.model.TaskStatus;
+import ru.yandex.fedorov.kanban.util.Managers;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,13 +15,12 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> tasks;
     private final Map<Integer, Epic> epics;
     private final Map<Integer, Subtask> subtasks;
-    private final HistoryManager history;
+    private final HistoryManager history = Managers.getDefaultHistory();
 
     public InMemoryTaskManager() {
         tasks = new HashMap<>();
         epics = new HashMap<>();
         subtasks = new HashMap<>();
-        history = new InMemoryHistoryManager();
     }
 
     @Override

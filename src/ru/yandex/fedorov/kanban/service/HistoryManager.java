@@ -1,6 +1,6 @@
-package tasks.service;
+package ru.yandex.fedorov.kanban.service;
 
-import tasks.model.Task;
+import ru.yandex.fedorov.kanban.model.Task;
 
 import java.util.List;
 

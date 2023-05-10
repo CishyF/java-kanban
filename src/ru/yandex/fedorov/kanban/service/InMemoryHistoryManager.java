@@ -1,6 +1,6 @@
-package tasks.service;
+package ru.yandex.fedorov.kanban.service;
 
-import tasks.model.Task;
+import ru.yandex.fedorov.kanban.model.Task;
 
 import java.util.*;
 
@@ -16,8 +16,9 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void add(Task task) {
         history.add(task);
-        if (history.size() > 10)
+        if (history.size() > 10) {
             history = new LinkedHashSet<>(new ArrayList<>(history).subList(1, 11));
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package tasks.model;
+package ru.yandex.fedorov.kanban.model;
 
 import java.util.ArrayList;
 import java.util.List;

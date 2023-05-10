@@ -1,11 +1,11 @@
-package tasks;
+package ru.yandex.fedorov.kanban;
 
-import tasks.model.Epic;
-import tasks.model.Subtask;
-import tasks.model.Task;
-import tasks.model.TaskStatus;
-import tasks.service.TaskManager;
-import tasks.util.Managers;
+import ru.yandex.fedorov.kanban.util.Managers;
+import ru.yandex.fedorov.kanban.model.Epic;
+import ru.yandex.fedorov.kanban.model.Subtask;
+import ru.yandex.fedorov.kanban.model.Task;
+import ru.yandex.fedorov.kanban.model.TaskStatus;
+import ru.yandex.fedorov.kanban.service.TaskManager;
 
 public class TaskManagerApplication {
 

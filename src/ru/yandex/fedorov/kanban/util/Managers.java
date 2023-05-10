@@ -1,9 +1,9 @@
-package tasks.util;
+package ru.yandex.fedorov.kanban.util;
 
-import tasks.service.HistoryManager;
-import tasks.service.InMemoryHistoryManager;
-import tasks.service.InMemoryTaskManager;
-import tasks.service.TaskManager;
+import ru.yandex.fedorov.kanban.service.InMemoryHistoryManager;
+import ru.yandex.fedorov.kanban.service.InMemoryTaskManager;
+import ru.yandex.fedorov.kanban.service.HistoryManager;
+import ru.yandex.fedorov.kanban.service.TaskManager;
 
 public class Managers {
 
