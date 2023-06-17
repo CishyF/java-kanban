@@ -66,12 +66,17 @@ public class TaskManagerApplication {
 
         taskManager.getHistory().forEach(System.out::println);
 
-        taskManager.getEpic(idEpic1);
-        taskManager.getEpic(idEpic1);
         taskManager.getTask(idTask2);
+        taskManager.getTasks();
+        taskManager.getEpic(idEpic1);
+        taskManager.getEpic(idEpic1);
 
         taskManager.getHistory().forEach(System.out::println);
+        System.out.println("-".repeat(200));
 
+        taskManager.removeTask(idTask2);
+
+        taskManager.getHistory().forEach(System.out::println);
     }
 
     public void printAllTypesOfTasks() {
