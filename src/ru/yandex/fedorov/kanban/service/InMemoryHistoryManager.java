@@ -61,10 +61,11 @@ public class InMemoryHistoryManager implements HistoryManager {
                 tempNode = new Node(null, task, null);
                 first = tempNode;
                 last = tempNode;
+            } else {
+                tempNode = new Node(last, task, null);
+                last.next = tempNode;
+                last = tempNode;
             }
-            tempNode = new Node(last, task, null);
-            last.next = tempNode;
-            last = tempNode;
 
             return tempNode;
         }
