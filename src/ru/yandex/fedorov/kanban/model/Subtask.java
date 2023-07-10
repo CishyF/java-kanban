@@ -15,12 +15,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask{" +
-                "epicId=" + epicId +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", status=" + status +
-                '}';
+        return String.format("%d,SUBTASK,%s,%s,%s,%d", id, name, status.toString(), description, epicId);
     }
 
 }
