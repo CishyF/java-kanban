@@ -7,11 +7,9 @@ import ru.yandex.fedorov.kanban.model.Task;
 import ru.yandex.fedorov.kanban.model.TaskStatus;
 import ru.yandex.fedorov.kanban.service.TaskManager;
 
-import java.io.File;
-
 public class TaskManagerApplication {
 
-    private final TaskManager taskManager = Managers.getFileBacked(new File("resources/data.csv"));
+    private final TaskManager taskManager = Managers.getDefault();
 
     public static void main(String[] args) {
         new TaskManagerApplication().start();
