@@ -1,2 +1,20 @@
 id,type,name,status,description,epic
+1,TASK,Обновленная задача 1,IN_PROGRESS, ,
+3,EPIC,Название 1 эпика,DONE, ,
+4,SUBTASK,Обновленная подзадача 1 эпика 1,DONE, ,3
+5,EPIC,Название 2 эпика,IN_PROGRESS, ,
+6,SUBTASK,Название подзадачи 1 эпика 2,NEW, ,5
+7,SUBTASK,Обновленная задача 2 эпика 2,IN_PROGRESS, ,5
+8,TASK,Обновленная задача 1,IN_PROGRESS, ,
+10,EPIC,Название 1 эпика,DONE, ,
+11,SUBTASK,Обновленная подзадача 1 эпика 1,DONE, ,10
+12,EPIC,Название 2 эпика,IN_PROGRESS, ,
+13,SUBTASK,Название подзадачи 1 эпика 2,NEW, ,12
+14,SUBTASK,Обновленная задача 2 эпика 2,IN_PROGRESS, ,12
+15,TASK,Обновленная задача 1,IN_PROGRESS, ,
+17,EPIC,Название 1 эпика,DONE, ,
+18,SUBTASK,Обновленная подзадача 1 эпика 1,DONE, ,17
+19,EPIC,Название 2 эпика,IN_PROGRESS, ,
+20,SUBTASK,Название подзадачи 1 эпика 2,NEW, ,19
+21,SUBTASK,Обновленная задача 2 эпика 2,IN_PROGRESS, ,19
 
