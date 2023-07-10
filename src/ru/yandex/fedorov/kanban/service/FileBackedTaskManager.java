@@ -4,10 +4,18 @@ import ru.yandex.fedorov.kanban.model.Epic;
 import ru.yandex.fedorov.kanban.model.Subtask;
 import ru.yandex.fedorov.kanban.model.Task;
 
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+
+    private final Path path;
+
+    public FileBackedTaskManager(Path path) {
+        this.path = Objects.requireNonNull(path);
+    }
 
     @Override
     public int createTask(Task task) {
