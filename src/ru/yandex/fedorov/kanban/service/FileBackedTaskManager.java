@@ -1,20 +1,25 @@
 package ru.yandex.fedorov.kanban.service;
 
+import ru.yandex.fedorov.kanban.exception.ManagerSaveException;
 import ru.yandex.fedorov.kanban.model.Epic;
 import ru.yandex.fedorov.kanban.model.Subtask;
 import ru.yandex.fedorov.kanban.model.Task;
 
-import java.nio.file.Path;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
 
-    private final Path path;
+    private final File file;
 
-    public FileBackedTaskManager(Path path) {
-        this.path = Objects.requireNonNull(path);
+    public FileBackedTaskManager(File file) {
+        this.file = Objects.requireNonNull(file);
     }
 
     @Override
@@ -113,8 +118,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         save();
     }
 
-    private static void save() {
+    private void save() {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write("id,type,name,status,description,epic");
+            // Соединение всех типов задач в один поток, сортировка по id, преобразование задач в строки
+            List<String> allTypesOfTasksInString = Stream.concat(
+                    Stream.concat(getTasks().stream(), getEpics().stream()), getSubtasks().stream()
+            ).sorted(Comparator.comparingInt(Task::getId))
+             .map(Object::toString)
+             .collect(Collectors.toList());
 
+            for (String task : allTypesOfTasksInString) {
+                writer.write(task);
+            }
+
+            writer.write("\n");
+            writer.write(historyToString(getHistory()));
+        } catch (IOException e) {
+            throw new ManagerSaveException();
+        }
     }
 
     private static String historyToString(List<Task> history) {
