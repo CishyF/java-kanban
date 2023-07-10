@@ -14,6 +14,11 @@ public class Subtask extends Task {
     }
 
     @Override
+    public TaskType getType() {
+        return TaskType.SUBTASK;
+    }
+
+    @Override
     public String toString() {
         return String.format("%d,SUBTASK,%s,%s,%s,%d", id, name, status.toString(), description, epicId);
     }
