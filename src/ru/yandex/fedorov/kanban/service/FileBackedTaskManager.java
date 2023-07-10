@@ -5,24 +5,22 @@ import ru.yandex.fedorov.kanban.exception.ManagerSaveException;
 import ru.yandex.fedorov.kanban.model.Epic;
 import ru.yandex.fedorov.kanban.model.Subtask;
 import ru.yandex.fedorov.kanban.model.Task;
-import ru.yandex.fedorov.kanban.model.TaskStatus;
+import ru.yandex.fedorov.kanban.util.CSVTaskUtils;
 
 import java.io.*;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
 
     public FileBackedTaskManager(File file) {
         this.file = Objects.requireNonNull(file);
-        if (file.length() != 0) {
-            loadFromFile();
-        }
     }
 
     @Override
@@ -123,92 +121,87 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("id,type,name,status,description,epic");
-            writer.write("\n");
+            writer.write(CSVTaskUtils.getHeader());
+            writer.newLine();
 
             // Соединение всех типов задач в один поток, сортировка по id, преобразование задач в строки
-            List<String> allTypesOfTasksInString = Stream.concat(
-                    Stream.concat(getTasks().stream(), getEpics().stream()), getSubtasks().stream()
-            ).sorted(Comparator.comparingInt(Task::getId))
+            List<String> allTypesOfTasksInString = Stream.of(
+                    tasks.values(), epics.values(), subtasks.values()
+            ).flatMap(Collection::stream)
+             .sorted(Comparator.comparingInt(Task::getId))
              .map(Object::toString)
              .collect(Collectors.toList());
 
             for (String task : allTypesOfTasksInString) {
                 writer.write(task);
-                writer.write("\n");
+                writer.newLine();
             }
 
-            writer.write("\n");
-            writer.write(historyToString(getHistory()));
+            writer.newLine();
+            writer.write(CSVTaskUtils.historyToString(history));
         } catch (IOException e) {
-            throw new ManagerSaveException();
+            throw new ManagerSaveException("Can't save to file: " + file.getName(), e);
         }
     }
 
-    private void loadFromFile() {
+    public static FileBackedTaskManager loadFromFile(File file) {
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
+
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             // Чтение названий столбцов
             reader.readLine();
 
             while (reader.ready()) {
                 String line = reader.readLine();
-                if (line.equals(""))
+                if (line.equals("")) {
                     break;
-                loadTaskFromString(line);
+                }
+
+                Task task = CSVTaskUtils.taskFromString(line);
+                manager.IdCounter = task.getId() + 1;
+
+                manager.addAnyTask(task);
             }
 
             String historyInString = reader.readLine();
             if (historyInString != null) {
-                addHistoryInManagerFromString(historyInString);
-            }
-        } catch (IOException e) {
-            throw new ManagerReadException();
-        }
-    }
-
-    private void loadTaskFromString(String taskInString) {
-        String[] taskFields = taskInString.split(",");
-
-        int id = Integer.parseInt(taskFields[0]);
-        if (id != IdCounter) {
-            IdCounter = id;
-        }
-
-        TaskStatus status = TaskStatus.valueOf(taskFields[3]);
-        switch (taskFields[1]) {
-            case "TASK":
-                Task task = new Task(taskFields[2], taskFields[4], status);
-                task.setId(id);
-                super.createTask(task);
-                break;
-            case "EPIC":
-                Epic epic = new Epic(taskFields[2], taskFields[4], status);
-                epic.setId(id);
-                super.createEpic(epic);
-                break;
-            case "SUBTASK":
-                Subtask subtask = new Subtask(taskFields[2], taskFields[4], status, Integer.parseInt(taskFields[5]));
-                subtask.setId(id);
-                super.createSubtask(subtask);
-        }
-    }
-
-    private static String historyToString(List<Task> history) {
-        return history.stream()
-                .map(t -> String.valueOf(t.getId()))
-                .collect(Collectors.joining(","));
-    }
-
-    private void addHistoryInManagerFromString(String history) {
-        for (String tempId : history.split(",")) {
-            int id = Integer.parseInt(tempId);
-
-            if (super.getTask(id) == null) {
-                if (super.getEpic(id) == null) {
-                    super.getSubtask(id);
+                for (int id : CSVTaskUtils.historyFromString(historyInString)) {
+                    Task task = manager.findAnyTask(id);
+                    if (task != null) {
+                        manager.history.add(task);
+                    }
                 }
             }
+        } catch (IOException e) {
+            throw new ManagerReadException("Can't read from file: " + file.getName(), e);
         }
+
+        return manager;
+    }
+
+    private void addAnyTask(Task task) {
+        switch (task.getType()) {
+            case TASK:
+                tasks.put(task.getId(), task);
+                break;
+            case EPIC:
+                epics.put(task.getId(), (Epic) task);
+                break;
+            case SUBTASK:
+                subtasks.put(task.getId(), (Subtask) task);
+        }
+    }
+
+    private Task findAnyTask(int id) {
+        if (tasks.containsKey(id)) {
+            return tasks.get(id);
+        } else if (epics.containsKey(id)) {
+            return epics.get(id);
+        } else if (subtasks.containsKey(id)) {
+            return subtasks.get(id);
+        }
+
+        return null;
     }
 
 }
