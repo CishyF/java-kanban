@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private int IdCounter = 1;
+    protected int IdCounter = 1;
     private final Map<Integer, Task> tasks;
     private final Map<Integer, Epic> epics;
     private final Map<Integer, Subtask> subtasks;
