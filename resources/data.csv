@@ -6,5 +6,12 @@ id,type,name,status,description,epic
 5,EPIC,Название 2 эпика,NEW, ,
 6,SUBTASK,Название подзадачи 1 эпика 2,NEW, ,5
 7,SUBTASK,Название подзадачи 2 эпика 2,NEW, ,5
+8,TASK,Название 1 задачи,NEW, ,
+9,TASK,Название 2 задачи,IN_PROGRESS, ,
+10,EPIC,Название 1 эпика,IN_PROGRESS, ,
+11,SUBTASK,Название позадачи 1 эпика 1,IN_PROGRESS, ,10
+12,EPIC,Название 2 эпика,NEW, ,
+13,SUBTASK,Название подзадачи 1 эпика 2,NEW, ,12
+14,SUBTASK,Название подзадачи 2 эпика 2,NEW, ,12
 
-1,5,4
+1,5,4,8,12,11

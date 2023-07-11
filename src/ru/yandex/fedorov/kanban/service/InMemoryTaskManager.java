@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    protected int IdCounter = 1;
+    protected int IdCounter = 0;
     protected final Map<Integer, Task> tasks;
     protected final Map<Integer, Epic> epics;
     protected final Map<Integer, Subtask> subtasks;
@@ -27,7 +27,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task task) {
         Objects.requireNonNull(task);
-        int taskId = IdCounter++;
+        int taskId = ++IdCounter;
 
         task.setId(taskId);
         tasks.put(taskId, task);
@@ -38,7 +38,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createEpic(Epic epic) {
         Objects.requireNonNull(epic);
-        int epicId = IdCounter++;
+        int epicId = ++IdCounter;
 
         epic.setId(epicId);
         epics.put(epicId, epic);
@@ -54,7 +54,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epics.containsKey(subtask.getEpicId()))
             throw new RuntimeException("Эпик, для которого вы пытаетесь добавить подзадачу, еще не существует.");
 
-        int subtaskId = IdCounter++;
+        int subtaskId = ++IdCounter;
 
         subtask.setId(subtaskId);
         subtasks.put(subtaskId, subtask);

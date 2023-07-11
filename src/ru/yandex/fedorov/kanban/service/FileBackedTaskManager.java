@@ -158,7 +158,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
 
                 Task task = CSVTaskUtils.taskFromString(line);
-                manager.IdCounter = task.getId() + 1;
+                manager.IdCounter = task.getId();
 
                 manager.addAnyTask(task);
             }
