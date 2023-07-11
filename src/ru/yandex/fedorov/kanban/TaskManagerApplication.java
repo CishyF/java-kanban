@@ -1,5 +1,6 @@
 package ru.yandex.fedorov.kanban;
 
+import ru.yandex.fedorov.kanban.service.FileBackedTaskManager;
 import ru.yandex.fedorov.kanban.util.Managers;
 import ru.yandex.fedorov.kanban.model.Epic;
 import ru.yandex.fedorov.kanban.model.Subtask;
@@ -7,15 +8,17 @@ import ru.yandex.fedorov.kanban.model.Task;
 import ru.yandex.fedorov.kanban.model.TaskStatus;
 import ru.yandex.fedorov.kanban.service.TaskManager;
 
-public class TaskManagerApplication {
+import java.io.File;
 
-    private final TaskManager taskManager = Managers.getDefault();
+public class TaskManagerApplication {
 
     public static void main(String[] args) {
         new TaskManagerApplication().start();
     }
 
     public void start() {
+        final TaskManager taskManager = Managers.getDefault();
+
         int idTask1 = taskManager.createTask(
                 new Task("Название 1 задачи", " ", TaskStatus.NEW)
         );
@@ -41,30 +44,25 @@ public class TaskManagerApplication {
                 new Subtask("Название подзадачи 2 эпика 2", " ", TaskStatus.NEW, idEpic2)
         );
 
-        printAllTypesOfTasks();
+        taskManager.getTask(idTask1);
+        taskManager.getEpic(idEpic2);
+        taskManager.getSubtask(idSubtask1Epic1);
 
-        Task updatedTask = new Task("Обновленная задача 1", " ", TaskStatus.IN_PROGRESS);
-        updatedTask.setId(idTask1);
-        taskManager.updateTask(updatedTask);
+        printInfo(taskManager);
 
-        Subtask updatedSubtask1Epic1 =
-                new Subtask("Обновленная подзадача 1 эпика 1", " ", TaskStatus.DONE, idEpic1);
-        updatedSubtask1Epic1.setId(idSubtask1Epic1);
-        taskManager.updateSubtask(updatedSubtask1Epic1);
+        File file = new File("resources/data.csv");
+        FileBackedTaskManager newManager = FileBackedTaskManager.loadFromFile(file);
 
-        Subtask updatedSubtask2Epic2 =
-                new Subtask("Обновленная задача 2 эпика 2", " ", TaskStatus.IN_PROGRESS, idEpic2);
-        updatedSubtask2Epic2.setId(idSubtask2Epic2);
-        taskManager.updateSubtask(updatedSubtask2Epic2);
+        printInfo(newManager);
 
-        taskManager.removeTask(idTask2);
     }
 
-    public void printAllTypesOfTasks() {
-        System.out.printf("Задачи:%n%s%nЭпики:%n%s%nПодзадачи:%n%s%n%s%n",
+    public void printInfo(TaskManager taskManager) {
+        System.out.printf("Задачи:%n%s%nЭпики:%n%s%nПодзадачи:%n%s%nИстория:%n%s%n%s%n",
                 taskManager.getTasks(),
                 taskManager.getEpics(),
                 taskManager.getSubtasks(),
+                taskManager.getHistory(),
                 "-".repeat(200)
         );
     }
