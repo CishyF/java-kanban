@@ -188,6 +188,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 epics.put(task.getId(), (Epic) task);
                 break;
             case SUBTASK:
+                Subtask subtask = (Subtask) task;
+                epics.get(subtask.getEpicId()).addSubtaskId(subtask.getId());
                 subtasks.put(task.getId(), (Subtask) task);
         }
     }
