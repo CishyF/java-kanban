@@ -6,6 +6,7 @@ import ru.yandex.fedorov.kanban.service.HistoryManager;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CSVTaskUtils {
@@ -43,6 +44,16 @@ public class CSVTaskUtils {
         }
 
         throw new ManagerSaveException("Can't read task from string");
+    }
+
+    public static String taskToString(Task task) {
+        Objects.requireNonNull(task);
+        return String.format(
+                "%d,%s,%s,%s,%s,%s",
+                task.getId(), task.getType().toString(), task.getName(),
+                task.getStatus().toString(), task.getDescription(),
+                task.getType().equals(TaskType.SUBTASK) ? String.valueOf(((Subtask) task).getEpicId()) : ""
+        );
     }
 
     public static List<Integer> historyFromString(String historyInString) {

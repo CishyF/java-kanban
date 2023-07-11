@@ -129,7 +129,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     tasks.values(), epics.values(), subtasks.values()
             ).flatMap(Collection::stream)
              .sorted(Comparator.comparingInt(Task::getId))
-             .map(Object::toString)
+             .map(CSVTaskUtils::taskToString)
              .collect(Collectors.toList());
 
             for (String task : allTypesOfTasksInString) {
