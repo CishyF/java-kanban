@@ -1,5 +1,6 @@
 package ru.yandex.fedorov.kanban.model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Subtask extends Task {
@@ -48,6 +49,8 @@ public class Subtask extends Task {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + Duration.ofMinutes(duration) +
                 '}';
     }
 
