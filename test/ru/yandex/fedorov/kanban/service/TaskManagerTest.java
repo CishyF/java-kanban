@@ -349,4 +349,21 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(List.of(task1, subtask, task2), taskManager.getPrioritizedTasks());
     }
 
+    @Test
+    public void shouldThrowsExceptionBecauseOfIntersection() {
+        LocalDateTime time = LocalDateTime.now();
+        Task task = new Task("Название задачи 1", " ", TaskStatus.IN_PROGRESS, time, 2);
+        RuntimeException e = assertThrows(
+            RuntimeException.class,
+            () -> {
+                taskManager.createTask(
+                    new Task("Название задачи 1", " ", TaskStatus.IN_PROGRESS, time.plusMinutes(1), 1)
+                );
+                taskManager.createTask(task);
+                System.out.println(taskManager.getTasks());
+            }
+        );
+        assertEquals("Задача: " + task + " попадает во временный промежуток выполнения другой задачи", e.getMessage());
+    }
+
 }

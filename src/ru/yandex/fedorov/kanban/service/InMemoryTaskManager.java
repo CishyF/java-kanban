@@ -7,6 +7,7 @@ import ru.yandex.fedorov.kanban.model.TaskStatus;
 import ru.yandex.fedorov.kanban.util.Managers;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Subtask> subtasks;
     protected final HistoryManager history;
     private final Set<Task> prioritizedTasks;
+    private final Set<LocalDateTime> busyTimes;
 
     public InMemoryTaskManager() {
         tasks = new HashMap<>();
@@ -35,6 +37,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
             return startTime1.compareTo(startTime2);
         });
+        busyTimes = new HashSet<>();
     }
 
     @Override
@@ -45,6 +48,7 @@ public class InMemoryTaskManager implements TaskManager {
         task.setId(taskId);
         tasks.put(taskId, task);
 
+        validateIntersections(task);
         prioritizedTasks.add(task);
 
         return taskId;
@@ -74,6 +78,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setId(subtaskId);
         subtasks.put(subtaskId, subtask);
 
+        validateIntersections(subtask);
         prioritizedTasks.add(subtask);
 
         updateEpicFields(subtask.getEpicId());
@@ -89,6 +94,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         tasks.put(task.getId(), task);
 
+        validateIntersections(task);
         prioritizedTasks.add(task);
     }
 
@@ -111,6 +117,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         subtasks.put(subtask.getId(), subtask);
 
+        validateIntersections(subtask);
         prioritizedTasks.add(subtask);
 
         updateEpicFields(subtask.getEpicId());
@@ -298,5 +305,26 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setStartTime(startTime == LocalDateTime.MAX ? null : startTime);
         epic.setDuration(duration);
         epic.setEndTime(endTime == LocalDateTime.MIN ? null : endTime);
+    }
+
+    private void validateIntersections(Task task) {
+        Objects.requireNonNull(task);
+        LocalDateTime startTime = task.getStartTime();
+        LocalDateTime endTime = task.getEndTime();
+        if (startTime == null) {
+            return;
+        }
+        // Обрезаем время до минут, так как минимальные интервалы в длительности выполнения равны минуте
+        startTime = startTime.truncatedTo(ChronoUnit.MINUTES);
+        endTime = endTime.truncatedTo(ChronoUnit.MINUTES);
+
+        if (busyTimes.contains(startTime) || busyTimes.contains(endTime)) {
+            throw new RuntimeException("Задача: " + task + " попадает во временный промежуток выполнения другой задачи");
+        }
+
+        while (!startTime.isAfter(endTime)) {
+            busyTimes.add(startTime);
+            startTime = startTime.plusMinutes(1);
+        }
     }
 }
