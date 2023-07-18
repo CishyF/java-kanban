@@ -1,11 +1,16 @@
 package ru.yandex.fedorov.kanban.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
 
     protected int id;
     protected String name;
     protected String description;
     protected TaskStatus status;
+    protected LocalDateTime startTime;
+    protected long duration;
 
     public Task(String name, String description, TaskStatus status) {
         this.name = name;
@@ -18,6 +23,32 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = status;
+    }
+
+    public Task(String name, String description, TaskStatus status, LocalDateTime startTime, long durationInMinutes) {
+        if (durationInMinutes < 0) {
+            throw new RuntimeException("Продолжительность задачи не может быть меньше 0");
+        }
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = durationInMinutes;
+    }
+
+    public Task(
+            int id, String name, String description,
+            TaskStatus status, LocalDateTime startTime, long durationInMinutes
+    ) {
+        if (durationInMinutes < 0) {
+            throw new RuntimeException("Продолжительность задачи не может быть меньше 0");
+        }
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = durationInMinutes;
     }
 
     public int getId() {
@@ -50,6 +81,21 @@ public class Task {
 
     public TaskType getType() {
         return TaskType.TASK;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime == null) {
+            return null;
+        }
+        return startTime.plus(Duration.ofMinutes(duration));
     }
 
     @Override
