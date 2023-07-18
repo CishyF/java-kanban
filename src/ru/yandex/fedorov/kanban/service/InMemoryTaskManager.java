@@ -230,7 +230,7 @@ public class InMemoryTaskManager implements TaskManager {
                 epic.getName(), epic.getDescription(), updatedStatus
         );
         updatedEpic.setId(epic.getId());
-        setEpicTimeInfo(epic, subtasksOfCurrentEpic);
+        setEpicTimeInfo(updatedEpic, subtasksOfCurrentEpic);
         subtasksOfCurrentEpic.forEach(subtask -> updatedEpic.addSubtaskId(subtask.getId()));
 
         epics.put(updatedEpic.getId(), updatedEpic);
