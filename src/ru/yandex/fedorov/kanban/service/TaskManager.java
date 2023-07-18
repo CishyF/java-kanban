@@ -22,6 +22,8 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
+    List<Task> getPrioritizedTasks();
+
     List<Task> getTasks();
 
     List<Epic> getEpics();

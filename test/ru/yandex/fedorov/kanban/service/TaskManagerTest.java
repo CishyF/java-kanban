@@ -6,6 +6,7 @@ import ru.yandex.fedorov.kanban.model.Subtask;
 import ru.yandex.fedorov.kanban.model.Task;
 import ru.yandex.fedorov.kanban.model.TaskStatus;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -327,6 +328,25 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         assertEquals(Collections.emptyList(), taskManager.getSubtasks());
         assertEquals(Collections.emptyList(), taskManager.getEpic(idEpic).getSubtasksId());
+    }
+
+    @Test
+    public void shouldReturnTasksByPriority() {
+        final int idEpic = taskManager.createEpic(
+            new Epic("Название эпика", " ", TaskStatus.NEW)
+        );
+        final Subtask subtask = new Subtask(
+            "Название позадачи эпика", " ", TaskStatus.IN_PROGRESS, LocalDateTime.now().plusMinutes(10), 10, idEpic
+        );
+        taskManager.createSubtask(subtask);
+
+        final Task task1 = new Task("Название задачи 1", " ", TaskStatus.IN_PROGRESS, LocalDateTime.now(), 5);
+        taskManager.createTask(task1);
+
+        final Task task2 = new Task("Название задачи 2", " ", TaskStatus.IN_PROGRESS);
+        taskManager.createTask(task2);
+
+        assertEquals(List.of(task1, subtask, task2), taskManager.getPrioritizedTasks());
     }
 
 }

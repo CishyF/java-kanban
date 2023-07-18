@@ -17,12 +17,24 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Epic> epics;
     protected final Map<Integer, Subtask> subtasks;
     protected final HistoryManager history;
+    private final Set<Task> prioritizedTasks;
 
     public InMemoryTaskManager() {
         tasks = new HashMap<>();
         epics = new HashMap<>();
         subtasks = new HashMap<>();
         history = Managers.getDefaultHistory();
+        prioritizedTasks = new TreeSet<>((t1, t2) -> {
+            LocalDateTime startTime1 = t1.getStartTime();
+            LocalDateTime startTime2 = t2.getStartTime();
+            if (startTime1 == null) {
+                if (startTime2 == null) {
+                    return 0;
+                }
+                return 1;
+            }
+            return startTime1.compareTo(startTime2);
+        });
     }
 
     @Override
@@ -32,6 +44,8 @@ public class InMemoryTaskManager implements TaskManager {
 
         task.setId(taskId);
         tasks.put(taskId, task);
+
+        prioritizedTasks.add(task);
 
         return taskId;
     }
@@ -60,6 +74,8 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setId(subtaskId);
         subtasks.put(subtaskId, subtask);
 
+        prioritizedTasks.add(subtask);
+
         updateEpicFields(subtask.getEpicId());
 
         return subtaskId;
@@ -72,6 +88,8 @@ public class InMemoryTaskManager implements TaskManager {
             return;
 
         tasks.put(task.getId(), task);
+
+        prioritizedTasks.add(task);
     }
 
     @Override
@@ -93,7 +111,13 @@ public class InMemoryTaskManager implements TaskManager {
 
         subtasks.put(subtask.getId(), subtask);
 
+        prioritizedTasks.add(subtask);
+
         updateEpicFields(subtask.getEpicId());
+    }
+
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
     }
 
     @Override
