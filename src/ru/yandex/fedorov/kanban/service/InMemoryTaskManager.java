@@ -6,6 +6,7 @@ import ru.yandex.fedorov.kanban.model.Task;
 import ru.yandex.fedorov.kanban.model.TaskStatus;
 import ru.yandex.fedorov.kanban.util.Managers;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(epicId);
         epics.put(epicId, epic);
 
-        updateEpicStatus(epicId);
+        updateEpicFields(epicId);
 
         return epicId;
     }
@@ -59,7 +60,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setId(subtaskId);
         subtasks.put(subtaskId, subtask);
 
-        updateEpicStatus(subtask.getEpicId());
+        updateEpicFields(subtask.getEpicId());
 
         return subtaskId;
     }
@@ -92,7 +93,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         subtasks.put(subtask.getId(), subtask);
 
-        updateEpicStatus(subtask.getEpicId());
+        updateEpicFields(subtask.getEpicId());
     }
 
     @Override
@@ -171,7 +172,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeSubtasks() {
-        epics.values().stream().mapToInt(Epic::getId).forEach(this::updateEpicStatus);
+        epics.values().stream().mapToInt(Epic::getId).forEach(this::updateEpicFields);
 
         subtasks.keySet().forEach(history::remove);
         subtasks.clear();
@@ -212,10 +213,10 @@ public class InMemoryTaskManager implements TaskManager {
         history.remove(id);
         subtasks.remove(id);
 
-        updateEpicStatus(epicId);
+        updateEpicFields(epicId);
     }
 
-    private void updateEpicStatus(int id) {
+    private void updateEpicFields(int id) {
         Epic epic = epics.get(id);
         if (epic == null)
             return;
@@ -229,6 +230,7 @@ public class InMemoryTaskManager implements TaskManager {
                 epic.getName(), epic.getDescription(), updatedStatus
         );
         updatedEpic.setId(epic.getId());
+        setEpicTimeInfo(epic, subtasksOfCurrentEpic);
         subtasksOfCurrentEpic.forEach(subtask -> updatedEpic.addSubtaskId(subtask.getId()));
 
         epics.put(updatedEpic.getId(), updatedEpic);
@@ -240,5 +242,37 @@ public class InMemoryTaskManager implements TaskManager {
         else if (subtasks.stream().allMatch(s -> s.getStatus() == TaskStatus.DONE))
             return TaskStatus.DONE;
         return TaskStatus.IN_PROGRESS;
+    }
+
+    private void setEpicTimeInfo(Epic epic, List<Subtask> subtasks) {
+        if (subtasks.isEmpty()) {
+            epic.setStartTime(null);
+            epic.setDuration(0);
+            epic.setEndTime(null);
+            return;
+        }
+
+        LocalDateTime startTime = LocalDateTime.MAX;
+        LocalDateTime endTime = LocalDateTime.MIN;
+        long duration = 0;
+
+        for (Subtask subtask : subtasks) {
+            LocalDateTime subtaskStartTime = subtask.getStartTime();
+            LocalDateTime subtaskEndTime = subtask.getEndTime();
+            long subtaskDuration = subtask.getDuration();
+
+            if (subtaskStartTime != null && subtaskStartTime.isBefore(startTime)) {
+                startTime = subtaskStartTime;
+            }
+            if (subtaskEndTime != null && subtaskEndTime.isAfter(endTime)) {
+                endTime = subtaskEndTime;
+            }
+
+            duration += subtaskDuration;
+        }
+
+        epic.setStartTime(startTime == LocalDateTime.MAX ? null : startTime);
+        epic.setDuration(duration);
+        epic.setEndTime(endTime == LocalDateTime.MIN ? null : endTime);
     }
 }
