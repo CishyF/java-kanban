@@ -4,12 +4,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Epic extends Task {
 
     private LocalDateTime endTime;
-
-    private final List<Integer> subtasksId = new ArrayList<>();
+    private List<Integer> subtasksId = new ArrayList<>();
 
     public Epic(String name, String description, TaskStatus status) {
         super(name, description, status);
@@ -21,6 +21,11 @@ public class Epic extends Task {
 
     public void addSubtaskId(int id) {
         subtasksId.add(id);
+    }
+
+    public void setSubtasksId(List<Integer> subtasksId) {
+        Objects.requireNonNull(subtasksId);
+        this.subtasksId = subtasksId;
     }
 
     public List<Integer> getSubtasksId() {
@@ -51,6 +56,10 @@ public class Epic extends Task {
             throw new RuntimeException("Время завершения не может быть раньше времени начала выполнения эпика");
         }
         this.endTime = endTime;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
     }
 
     @Override

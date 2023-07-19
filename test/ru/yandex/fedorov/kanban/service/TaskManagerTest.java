@@ -5,6 +5,7 @@ import ru.yandex.fedorov.kanban.model.Epic;
 import ru.yandex.fedorov.kanban.model.Subtask;
 import ru.yandex.fedorov.kanban.model.Task;
 import ru.yandex.fedorov.kanban.model.TaskStatus;
+import ru.yandex.fedorov.kanban.exception.TaskValidationException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -353,17 +354,16 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldThrowsExceptionBecauseOfIntersection() {
         LocalDateTime time = LocalDateTime.now();
         Task task = new Task("Название задачи 1", " ", TaskStatus.IN_PROGRESS, time, 2);
-        RuntimeException e = assertThrows(
-            RuntimeException.class,
+        TaskValidationException e = assertThrows(
+            TaskValidationException.class,
             () -> {
                 taskManager.createTask(
                     new Task("Название задачи 1", " ", TaskStatus.IN_PROGRESS, time.plusMinutes(1), 1)
                 );
                 taskManager.createTask(task);
-                System.out.println(taskManager.getTasks());
             }
         );
-        assertEquals("Задача: " + task + " попадает во временный промежуток выполнения другой задачи", e.getMessage());
+        assertEquals("Задача " + task.getId() + " пересекается по времени с 1", e.getMessage());
     }
 
 }
