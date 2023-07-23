@@ -12,12 +12,12 @@ import java.net.http.HttpResponse;
 
 public class KVTaskClient {
 
-    private final HttpClient server;
+    private final HttpClient client;
     private final String URL;
     private final String API_TOKEN;
 
     public KVTaskClient(String URL) {
-        server = HttpClient.newHttpClient();
+        client = HttpClient.newHttpClient();
         this.URL = URL;
         API_TOKEN = registerApiToken(URL);
     }
@@ -28,9 +28,8 @@ public class KVTaskClient {
             HttpRequest request = HttpRequest.newBuilder()
                     .GET()
                     .uri(url)
-                    .version(HttpClient.Version.HTTP_1_1)
                     .build();
-            HttpResponse<String> response = server.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
         } catch (IOException | InterruptedException e) {
             throw new ClientRegistrationException("Произошла ошибка при регистрации клиента", e);
@@ -45,7 +44,7 @@ public class KVTaskClient {
                     .uri(url)
                     .version(HttpClient.Version.HTTP_1_1)
                     .build();
-            server.send(request, HttpResponse.BodyHandlers.ofString());
+            client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             throw new ClientSaveException("Произошла ошибка при загрузке данных на сервер", e);
         }
@@ -59,7 +58,7 @@ public class KVTaskClient {
                     .uri(url)
                     .version(HttpClient.Version.HTTP_1_1)
                     .build();
-            HttpResponse<String> response = server.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
         } catch (IOException | InterruptedException e) {
             throw new ClientLoadException("Произошла ошибка при получении данных с сервера", e);
