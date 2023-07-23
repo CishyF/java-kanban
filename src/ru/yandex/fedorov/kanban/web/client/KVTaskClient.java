@@ -30,6 +30,11 @@ public class KVTaskClient {
                     .uri(url)
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new ClientRegistrationException(
+                    String.format("Произошла ошибка при регистрации клиента, код состояния: %d", response.statusCode())
+                );
+            }
             return response.body();
         } catch (IOException | InterruptedException e) {
             throw new ClientRegistrationException("Произошла ошибка при регистрации клиента", e);
@@ -44,7 +49,12 @@ public class KVTaskClient {
                     .uri(url)
                     .version(HttpClient.Version.HTTP_1_1)
                     .build();
-            client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new ClientSaveException(
+                    String.format("Произошла ошибка при сохранении, код состояния: %d", response.statusCode())
+                );
+            }
         } catch (IOException | InterruptedException e) {
             throw new ClientSaveException("Произошла ошибка при загрузке данных на сервер", e);
         }
@@ -59,6 +69,11 @@ public class KVTaskClient {
                     .version(HttpClient.Version.HTTP_1_1)
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new ClientLoadException(
+                    String.format("Произошла ошибка при получении данных, код состояния: %d", response.statusCode())
+                );
+            }
             return response.body();
         } catch (IOException | InterruptedException e) {
             throw new ClientLoadException("Произошла ошибка при получении данных с сервера", e);
