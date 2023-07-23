@@ -26,12 +26,12 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks = new HashMap<>();
         history = Managers.getDefaultHistory();
         prioritizedTasks = new TreeSet<>((t1, t2) -> {
+            if (t1.equals(t2)) {
+                return 0;
+            }
             LocalDateTime startTime1 = t1.getStartTime();
             LocalDateTime startTime2 = t2.getStartTime();
             if (startTime1 == null) {
-                if (startTime2 == null) {
-                    return 0;
-                }
                 return 1;
             }
             return startTime1.compareTo(startTime2);
