@@ -1,15 +1,14 @@
 package ru.yandex.fedorov.kanban.util;
 
 import ru.yandex.fedorov.kanban.service.*;
-
-import java.io.File;
+import ru.yandex.fedorov.kanban.web.service.HttpTaskManager;
 
 public class Managers {
 
     private Managers() {}
 
-    public static TaskManager getDefault() {
-        return FileBackedTaskManager.loadFromFile(new File("resources/data.csv"));
+    public static HttpTaskManager getDefault() {
+        return HttpTaskManager.loadFromServer("http://localhost:8078");
     }
 
     public static HistoryManager getDefaultHistory() {
