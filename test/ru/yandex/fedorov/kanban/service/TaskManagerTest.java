@@ -13,12 +13,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class TaskManagerTest<T extends TaskManager> {
+public abstract class TaskManagerTest<T extends TaskManager> {
 
-    T taskManager;
+    protected T taskManager;
 
     /*
-    Тесты для рассчета статуса Epic
+    Тесты для расчета статуса Epic
     ----------------------------------------------------------------------------------------------------------------
     */
 
@@ -107,7 +107,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     /*
-    Закончились тесты для рассчета статуса Epic
+    Закончились тесты для расчета статуса Epic
     ----------------------------------------------------------------------------------------------------------------
     */
 
