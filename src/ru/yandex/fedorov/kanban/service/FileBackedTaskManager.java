@@ -119,7 +119,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    private void save() {
+    protected void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(CSVTaskUtils.getHeader());
             writer.newLine();
@@ -179,7 +179,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return manager;
     }
 
-    private void addAnyTask(Task task) {
+    protected void addAnyTask(Task task) {
         switch (task.getType()) {
             case TASK:
                 tasks.put(task.getId(), task);
@@ -196,7 +196,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    private Task findAnyTask(int id) {
+    protected Task findAnyTask(int id) {
         if (tasks.containsKey(id)) {
             return tasks.get(id);
         } else if (epics.containsKey(id)) {
